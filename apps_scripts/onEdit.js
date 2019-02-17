@@ -29,6 +29,7 @@ function updateUpdatedAtColumn(e) {
 }
 
 function notifyBuilder() {
+  // Debounce here
   const time = new Date().getTime();
   const SCRIPT_LAST_CALLED_AT = "SCRIPT_LAST_CALLED_AT";
 
@@ -45,21 +46,18 @@ function notifyBuilder() {
 }
 
 function makeRequestToBuilder() {
-  /*
+  const properties = PropertiesService.getScriptProperties();
+
   const options = {
-    'method' : 'get',
-    'contentType': 'application/json',
-    'payload' : JSON.stringify({
-      "message": 'yeaaaa'
-    }),
-    'headers': {
-      'SECRET': '2204360963193477194178580268'
+    method: "get",
+    headers: {
+      CLIENT_SECRET: properties.getProperty("CLIENT_SECRET")
     }
   };
-  */
 
   const response = UrlFetchApp.fetch(
-    "https://us-central1-sheets-as-cms.cloudfunctions.net/builder/"
+    "https://us-central1-sheets-as-cms.cloudfunctions.net/builder/",
+    options
   );
   Logger.log("SUCCESS", response.getResponseCode());
 }
