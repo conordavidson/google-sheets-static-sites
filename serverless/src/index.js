@@ -1,7 +1,8 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
+const { ON_DEVELOPMENT } = require("./constants");
 const app = require("./app");
 
-if (process.env.NODE_ENV === "development") {
+if (ON_DEVELOPMENT) {
   const port = 3000;
   app.listen(port, () => console.log(`~~ running on ${port} ~~`));
 }
