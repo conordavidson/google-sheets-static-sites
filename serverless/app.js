@@ -85,7 +85,7 @@ const uploadFileToGCP = (res, products) => {
       })
       .catch(err => {
         console.log("error", err);
-        res.status(423).send();
+        res.status(422).send();
       });
   });
 };
