@@ -1,0 +1,11 @@
+{{#each products}}
+  <ul>
+    <li>{{this.category}}</li>
+    <li>{{this.brand}}</li>
+    <li>{{this.name}}</li>
+    <li>{{this.description}}</li>
+    <img src="{{this.imageSrc}}"/>
+    <li><a href="{{this.link}}">{{this.link}}</a></li>
+    <li>published: {{this.published}}</li>
+  </ul>
+{{/each}}

@@ -1,4 +1,5 @@
-.env
-.service-account-crendentials.json
-node_modules
-.DS_Store
+**/.env
+**/.service-account-credentials.json
+**/node_modules
+**/.DS_Store
+**/app.zip
