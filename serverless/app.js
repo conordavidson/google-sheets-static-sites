@@ -22,7 +22,10 @@ const app = express();
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 app.get("/", (req, res) => {
-  if (req.get("CLIENT_SECRET") !== process.env.CLIENT_SECRET) {
+  if (
+    process.env.NODE_ENV === "production" &&
+    req.get("CLIENT_SECRET") !== process.env.CLIENT_SECRET
+  ) {
     return res.status(403).send();
   }
 
