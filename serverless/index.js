@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 const { ON_DEVELOPMENT } = require("./constants");
 const app = require("./app");
 
