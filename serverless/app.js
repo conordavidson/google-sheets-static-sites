@@ -3,6 +3,7 @@ const express = require("express");
 const hbs = require("express-handlebars");
 const getProducts = require("./requests/getProducts");
 const uploadHTMLFileToGCP = require("./requests/uploadHTMLFileToGCP");
+const uploadPublicDirToGCP = require("./requests/uploadPublicDirToGCP");
 const { ON_PRODUCTION, ON_DEVELOPMENT, CLIENT_SECRET } = require("./constants");
 
 const app = express();
@@ -13,6 +14,7 @@ app.engine(
     layoutsDir: path.join(__dirname, "views/layouts")
   })
 );
+app.use(express.static("public"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");
 app.get("/", (req, res) => {
@@ -26,6 +28,7 @@ app.get("/", (req, res) => {
       if (ON_PRODUCTION) {
         return res.render("index", { products }, (err, html) => {
           uploadHTMLFileToGCP(html)
+            .then(() => uploadPublicDirToGCP())
             .then(() => {
               console.log("success");
               res.status(200).send();

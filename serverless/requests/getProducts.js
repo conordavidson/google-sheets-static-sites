@@ -1,3 +1,4 @@
+const { format, parse } = require("date-fns");
 const GoogleSpreadsheet = require("google-spreadsheet");
 
 const {
@@ -16,18 +17,30 @@ module.exports = () =>
         if (!productWorksheet) reject("products worksheet not found");
 
         productWorksheet.getRows({ offset: 1, limit: 250 }, (err, rows) => {
-          const products = rows.map(product => {
-            return {
-              category: product.category,
-              brand: product.brand,
-              name: product.name,
-              description: product.description,
-              imageSrc: product.imagesrc,
-              link: product.link,
-              updatedAt: product.updatedat,
-              published: !!product.published
-            };
-          });
+          const products = rows
+            .map(product => {
+              return {
+                category: product.category,
+                slug: product.category.toLowerCase().replace(" ", "-"),
+                brand: product.brand,
+                name: product.name,
+                description: product.description,
+                imageSrc: product.imagesrc,
+                link: product.link,
+                updatedAt: format(
+                  parse(parseInt(product.updatedat)),
+                  "M/DD/YYYY h:mm A"
+                ),
+                published: product.published === "1"
+              };
+            })
+            .sort((a, b) => {
+              const categoryA = a.category.toLowerCase();
+              const categoryB = b.category.toLowerCase();
+              if (categoryA < categoryB) return -1;
+              if (categoryA > categoryB) return 1;
+              return 0;
+            });
 
           resolve(products);
         });

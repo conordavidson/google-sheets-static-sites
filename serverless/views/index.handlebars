@@ -1,11 +1,38 @@
-{{#each products}}
-  <ul>
-    <li>{{this.category}}</li>
-    <li>{{this.brand}}</li>
-    <li>{{this.name}}</li>
-    <li>{{this.description}}</li>
-    <img src="{{this.imageSrc}}"/>
-    <li><a href="{{this.link}}">{{this.link}}</a></li>
-    <li>published: {{this.published}}</li>
-  </ul>
-{{/each}}
+<header>
+  <mark>֍</mark>
+  <h1>zander's list</h1>
+  <h3>so you don't have to make these decisions</h3>
+  <div class="categories">
+    {{#each products}}
+      {{#if this.published}}
+        <a href="#{{this.slug}}">{{this.category}}</a>{{#unless @last}} —{{/unless}}
+      {{/if}}
+    {{/each}}
+  </div>
+</header>
+<main>
+  {{#each products}}
+    {{#if this.published}}
+      <div class="product" id={{this.slug}}>
+        <div class="product-header">
+          <div class="product-category">
+            <h4>{{this.category}}</h4>
+          </div>
+          <div class="product-date">
+            <h4>{{this.updatedAt}}</h4>
+          </div>
+        </div>
+        <div class="product-body">
+          <h3>{{this.brand}} — {{this.name}}</h3>
+          <div class="product-image">
+            <img src="{{this.imageSrc}}"/>
+            {{#if this.description}}
+              <h5>{{this.description}}</h5>
+            {{/if}}
+          </div>
+          <a href="{{this.link}}">{{this.link}}</a>
+        </div>
+      </div>
+    {{/if}}
+  {{/each}}
+</main>
