@@ -1,47 +1,29 @@
 const path = require("path");
 const express = require("express");
 const hbs = require("express-handlebars");
+const bodyParser = require("body-parser");
 const getProducts = require("./requests/getProducts");
 const uploadHTMLFileToGCP = require("./requests/uploadHTMLFileToGCP");
 const uploadPublicDirToGCP = require("./requests/uploadPublicDirToGCP");
+const configureView = require("./lib/configureView");
+const extractSiteData = require("./lib/extractSiteData");
+const renderSite = require("./lib/renderSite");
 const { ON_PRODUCTION, ON_DEVELOPMENT, CLIENT_SECRET } = require("./constants");
 
 const app = express();
-app.engine(
-  "handlebars",
-  hbs({
-    defaultLayout: "main",
-    layoutsDir: path.join(__dirname, "views/layouts")
-  })
-);
-app.use(express.static("public"));
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "handlebars");
-app.get("/", (req, res) => {
+app.use(bodyParser.json());
+app.post("/", (req, res) => {
   if (ON_PRODUCTION && !req.get("CLIENT_SECRET")) return res.status(403).send();
   if (ON_PRODUCTION && req.get("CLIENT_SECRET") !== CLIENT_SECRET)
     return res.status(403).send();
 
-  return getProducts()
-    .then(products => {
-      if (ON_DEVELOPMENT) return res.render("index", { products });
-      if (ON_PRODUCTION) {
-        return res.render("index", { products }, (err, html) => {
-          uploadHTMLFileToGCP(html)
-            .then(() => uploadPublicDirToGCP())
-            .then(() => {
-              console.log("success");
-              res.status(200).send();
-            })
-            .catch(err => {
-              console.log("error", err);
-              res.status(422).send();
-            });
-        });
-      }
-    })
+  return configureView(app, req)
+    .then(() => extractSiteData(req))
+    .then(siteData => renderSite(siteData, res))
+    .then(() => res.status(200).send())
     .catch(err => {
-      return res.status(422).send(err);
+      console.log("error", err);
+      res.status(422).send();
     });
 });
 
