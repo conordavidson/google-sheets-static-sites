@@ -27,7 +27,7 @@ app.post("/", (req, res) => {
       res.status(200).send();
     })
     .catch(err => {
-      console.log("error", err);
+      console.log("Error", err);
       res.status(422).send();
     });
 });
