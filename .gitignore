@@ -2,3 +2,5 @@
 **/.service-account-credentials.json
 **/node_modules
 **/.DS_Store
+test-server
+test-src
