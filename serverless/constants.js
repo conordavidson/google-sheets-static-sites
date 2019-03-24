@@ -1,3 +1,5 @@
+const path = require("path");
+
 const ON_PRODUCTION = process.env.NODE_ENV === "production";
 const ON_DEVELOPMENT = process.env.NODE_ENV === "development";
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -11,7 +13,11 @@ const GOOGLE_SERVICE_ACCOUNT_CREDENTIALS = ON_PRODUCTION
 
 const GCP_PROJECT_ID = process.env.GCP_PROJECT_ID;
 const GCP_BUCKET_ID = process.env.GCP_BUCKET_ID;
-const INDEX_FILE_PATH = "index.html";
+
+const OUTPUT_PATH = path.join(__dirname, "./tmp/src.zip");
+const EXTRACT_PATH = path.join(__dirname, "./tmp/src");
+const PUBLIC_PATH = path.join(EXTRACT_PATH, "public");
+const VIEW_PATH = path.join(EXTRACT_PATH, "views");
 
 module.exports = {
   ON_PRODUCTION,
@@ -22,5 +28,9 @@ module.exports = {
   GOOGLE_SERVICE_ACCOUNT_CREDENTIALS,
   GCP_PROJECT_ID,
   GCP_BUCKET_ID,
-  INDEX_FILE_PATH
+  INDEX_FILE_PATH,
+  OUTPUT_PATH,
+  EXTRACT_PATH,
+  PUBLIC_PATH,
+  VIEW_PATH
 };

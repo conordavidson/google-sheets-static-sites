@@ -8,6 +8,7 @@ const uploadPublicDirToGCP = require("./requests/uploadPublicDirToGCP");
 const configureView = require("./lib/configureView");
 const extractSiteData = require("./lib/extractSiteData");
 const renderSite = require("./lib/renderSite");
+const downloadSource = require("./lib/downloadSource");
 const { ON_PRODUCTION, ON_DEVELOPMENT, CLIENT_SECRET } = require("./constants");
 
 const app = express();
@@ -17,10 +18,9 @@ app.post("/", (req, res) => {
   if (ON_PRODUCTION && req.get("CLIENT_SECRET") !== CLIENT_SECRET)
     return res.status(403).send();
 
-  return configureView(app, req)
-    .then(() => extractSiteData(req))
-    .then(siteData => renderSite(siteData, res))
-    .then(() => res.status(200).send())
+  return downloadSource(req)
+    .then(() => renderSite(req, res))
+    .then(markup => res.send(markup))
     .catch(err => {
       console.log("error", err);
       res.status(422).send();
