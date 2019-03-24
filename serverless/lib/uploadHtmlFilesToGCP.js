@@ -7,6 +7,7 @@ const {
 } = require("../constants");
 
 module.exports = routeMap => {
+  console.log("Uploading HTML files to GCP");
   if (ON_PRODUCTION) {
     const client = new Compute();
   }

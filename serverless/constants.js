@@ -16,8 +16,6 @@ const GCP_BUCKET_ID = process.env.GCP_BUCKET_ID;
 
 const OUTPUT_PATH = path.join(__dirname, "./tmp/src.zip");
 const EXTRACT_PATH = path.join(__dirname, "./tmp/src");
-const PUBLIC_PATH = path.join(EXTRACT_PATH, "public");
-const VIEW_PATH = path.join(EXTRACT_PATH, "views");
 
 module.exports = {
   ON_PRODUCTION,
@@ -28,9 +26,6 @@ module.exports = {
   GOOGLE_SERVICE_ACCOUNT_CREDENTIALS,
   GCP_PROJECT_ID,
   GCP_BUCKET_ID,
-  INDEX_FILE_PATH,
   OUTPUT_PATH,
-  EXTRACT_PATH,
-  PUBLIC_PATH,
-  VIEW_PATH
+  EXTRACT_PATH
 };

@@ -2,17 +2,17 @@ const path = require("path");
 const express = require("express");
 const hbs = require("express-handlebars");
 const bodyParser = require("body-parser");
-const getProducts = require("./requests/getProducts");
-const uploadHTMLFileToGCP = require("./requests/uploadHTMLFileToGCP");
-const uploadPublicDirToGCP = require("./requests/uploadPublicDirToGCP");
-const configureView = require("./lib/configureView");
-const extractSiteData = require("./lib/extractSiteData");
-const renderSite = require("./lib/renderSite");
+
 const downloadSource = require("./lib/downloadSource");
+const renderSite = require("./lib/renderSite");
+const uploadHtmlFilesToGCP = require("./lib/uploadHtmlFilesToGCP");
+const uploadPublicDirToGCP = require("./lib/uploadPublicDirToGCP");
+
 const { ON_PRODUCTION, ON_DEVELOPMENT, CLIENT_SECRET } = require("./constants");
 
 const app = express();
 app.use(bodyParser.json());
+
 app.post("/", (req, res) => {
   if (ON_PRODUCTION && !req.get("CLIENT_SECRET")) return res.status(403).send();
   if (ON_PRODUCTION && req.get("CLIENT_SECRET") !== CLIENT_SECRET)
@@ -20,7 +20,12 @@ app.post("/", (req, res) => {
 
   return downloadSource(req)
     .then(() => renderSite(req, res))
-    .then(markup => res.send(markup))
+    .then(uploadHtmlFilesToGCP)
+    .then(() => uploadPublicDirToGCP(req))
+    .then(() => {
+      console.log("Success!");
+      res.status(200).send();
+    })
     .catch(err => {
       console.log("error", err);
       res.status(422).send();

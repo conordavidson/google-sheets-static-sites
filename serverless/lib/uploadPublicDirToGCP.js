@@ -7,19 +7,21 @@ const {
   ON_PRODUCTION,
   GCP_PROJECT_ID,
   GCP_BUCKET_ID,
-  PUBLIC_PATH
+  EXTRACT_PATH
 } = require("../constants");
 
-module.exports = () =>
+module.exports = req =>
   new Promise((resolve, reject) => {
+    console.log("Uploading public files to GCP");
     if (ON_PRODUCTION) {
       const client = new Compute();
     }
 
     const storage = new Storage({ projectId: GCP_PROJECT_ID });
     const bucket = storage.bucket(GCP_BUCKET_ID);
+    const publicDirectory = path.join(EXTRACT_PATH, req.body.public);
 
-    const walk = findit(PUBLIC_PATH);
+    const walk = findit(publicDirectory);
     const uploads = [];
 
     walk.on("file", filePath => {

@@ -6,7 +6,7 @@ const _escaperegexp = require("lodash.escaperegexp");
 const path = require("path");
 const fs = require("fs");
 
-const { VIEW_PATH } = require("../constants");
+const { EXTRACT_PATH } = require("../constants");
 
 const BEAUTIFY = false;
 const DOCTYPE = "<!DOCTYPE html>";
@@ -27,16 +27,17 @@ const BABEL_CONFIG = {
 
 module.exports = (req, res) =>
   new Promise((resolve, reject) => {
+    console.log("Rendering site");
     const routes = req.body.routes;
 
     require("@babel/register")({
-      only: [VIEW_PATH],
+      only: [EXTRACT_PATH],
       ...BABEL_CONFIG
     });
 
     const routeMap = Object.entries(routes).reduce(
       (map, [routeName, routeView]) => {
-        const componentModule = require(path.join(VIEW_PATH, routeView));
+        const componentModule = require(path.join(EXTRACT_PATH, routeView));
         const component = componentModule.default || componentModule;
         const markup =
           DOCTYPE +
