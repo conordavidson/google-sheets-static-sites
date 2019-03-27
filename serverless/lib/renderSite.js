@@ -8,7 +8,6 @@ const fs = require("fs");
 
 const { EXTRACT_PATH } = require("../constants");
 
-const BEAUTIFY = false;
 const DOCTYPE = "<!DOCTYPE html>";
 const BABEL_CONFIG = {
   presets: [
@@ -44,7 +43,7 @@ module.exports = (req, res) =>
           ReactDOMServer.renderToStaticMarkup(
             React.createElement(component, req.body.data)
           );
-        map[routeName] = BEAUTIFY ? beautifyHTML(markup) : markup;
+        map[routeName] = beautifyHTML(markup);
         return map;
       },
       {}
