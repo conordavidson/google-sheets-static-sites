@@ -5,3 +5,4 @@
 test-server
 test-src
 serverless/tmp
+dist
