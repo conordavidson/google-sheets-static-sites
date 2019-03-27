@@ -13,6 +13,7 @@ module.exports = routeMap =>
   new Promise((resolve, reject) => {
     if (ON_DEVELOPMENT) {
       console.log("Writing HTML files to dist directory");
+
       Object.entries(routeMap).forEach(([routeName, markup]) => {
         const filePath = path.join(DIST_PATH, `${routeName}.html`);
         try {
@@ -24,6 +25,7 @@ module.exports = routeMap =>
       resolve();
     } else {
       console.log("Uploading HTML files to GCP");
+
       const client = new Compute();
       const storage = new Storage({ projectId: GCP_PROJECT_ID });
       const bucket = storage.bucket(GCP_BUCKET_ID);
